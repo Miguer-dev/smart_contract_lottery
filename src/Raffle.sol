@@ -1,4 +1,4 @@
-// 4:44:12
+// 5:51:24
 // Layout of Contract:
 // version
 // imports
@@ -137,5 +137,13 @@ contract Raffle is VRFConsumerBaseV2 {
     //Getter functions
     function getEntraceFee() external view returns (uint256) {
         return i_entranceFee;
+    }
+
+    function getRaffleState() external view returns (State) {
+        return s_raffleState;
+    }
+
+    function getUser(uint256 index) external view returns (address) {
+        return s_users[index];
     }
 }
