@@ -16,6 +16,7 @@ contract HelperConfig is Script {
         uint64 subscriptionId;
         uint32 callbackGasLimit;
         address linkContract;
+        uint256 deployerKey;
     }
 
     NetworkConfig public activeNetworkConfig;
@@ -29,7 +30,7 @@ contract HelperConfig is Script {
         else activeNetworkConfig = _getOrCreateTestChainEthConfig();
     }
 
-    function _getGoerliEthConfig() internal pure returns (NetworkConfig memory) {
+    function _getGoerliEthConfig() internal view returns (NetworkConfig memory) {
         NetworkConfig memory goerliConfig = NetworkConfig({
             entranceFee: 0.01 ether,
             interval: 30,
@@ -37,7 +38,8 @@ contract HelperConfig is Script {
             gasLane: 0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15,
             subscriptionId: 13505,
             callbackGasLimit: 500000,
-            linkContract: 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
+            linkContract: 0x326C977E6efc84E512bB9C30f76E30c160eD06FB,
+            deployerKey: vm.envUint("GOERLI_PRIVATE_KEY")
         });
         return goerliConfig;
     }
@@ -57,7 +59,8 @@ contract HelperConfig is Script {
             gasLane: 0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15,
             subscriptionId: 0,
             callbackGasLimit: 500000,
-            linkContract: address(linkToken)
+            linkContract: address(linkToken),
+            deployerKey: vm.envUint("GANACHE_PRIVATE_KEY")
         });
         return config;
     }
