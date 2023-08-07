@@ -1,26 +1,3 @@
-// 5:51:24
-// Layout of Contract:
-// version
-// imports
-// errors
-// interfaces, libraries, contracts
-// Type declarations
-// State variables
-// Events
-// Modifiers
-// Functions
-
-// Layout of Functions:
-// constructor
-// receive function (if exists)
-// fallback function (if exists)
-// external
-// public
-// internal
-// private
-// internal & private view & pure functions
-// external & public view & pure functions
-
 // SPDX-License-Identifier: MIT
 
 pragma solidity >=0.8.0 <0.9.0;
@@ -62,6 +39,7 @@ contract Raffle is VRFConsumerBaseV2 {
 
     event EnteredRaffle(address indexed user);
     event PickedWinner(address indexed user);
+    event RequestRaffleWinner(uint256 indexed requestId);
 
     constructor(
         uint256 entraceFee,
@@ -116,10 +94,11 @@ contract Raffle is VRFConsumerBaseV2 {
         if (!upkeepNeeded) revert Raffle__UpkeepNotNeeded(address(this).balance, s_users.length, s_raffleState);
 
         s_raffleState = State.CLOSE;
-
-        i_vrfCoordinator.requestRandomWords(
+        uint256 requestId = i_vrfCoordinator.requestRandomWords(
             i_gasLane, i_subscriptionId, REQUEST_CONFIRMATION, i_callbackGasLimit, NUM_WORDS
         );
+
+        emit RequestRaffleWinner(requestId);
     }
 
     function fulfillRandomWords(uint256, /*_requestId*/ uint256[] memory _randomWords) internal override {
@@ -145,5 +124,17 @@ contract Raffle is VRFConsumerBaseV2 {
 
     function getUser(uint256 index) external view returns (address) {
         return s_users[index];
+    }
+
+    function getUserlenght() external view returns (uint256) {
+        return s_users.length;
+    }
+
+    function getWinner() external view returns (address) {
+        return s_winner;
+    }
+
+    function getLastTimestamp() external view returns (uint256) {
+        return s_lastTimestamp;
     }
 }
