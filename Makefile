@@ -1,6 +1,6 @@
 -include .env
 
-.PHONY: all test clean deploy fund help install snapshot format anvil 
+.PHONY: all test clean deploy fund help install snapshot format anvil createSubscription addConsumer fundSubscription
 
 help:
 	@echo "Usage:"
